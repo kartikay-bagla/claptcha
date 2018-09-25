@@ -74,6 +74,9 @@ class Claptcha(object):
               It is advised to not use this option if you want to focus on
               efficiency, since generating noise can significantly extend
               image creation time. Default: 0.
+            * *drawLine* (``bool``) --
+              Parameter to determine if a line through text should be drawn.
+              Default: True.
         """
         self.source = source
         self.size = size
@@ -83,6 +86,7 @@ class Claptcha(object):
         self.format = kwargs.get('format', 'PNG')
         self.resample = kwargs.get('resample', Image.BILINEAR)
         self.noise = abs(kwargs.get('noise', 0.))
+        self.drawLine = kwargs.get("drawLine", True)
 
     @property
     def image(self):
@@ -112,7 +116,10 @@ class Claptcha(object):
         self._writeText(image, text, pos=(margin_x, margin_y))
 
         # Line
-        self._drawLine(image)
+        if self.drawLine:
+            self._drawLine(image)
+        else:
+            pass
 
         # White noise
         noise = self._whiteNoise(image.size)
